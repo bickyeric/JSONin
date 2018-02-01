@@ -1,70 +1,81 @@
-#include "JSONin.h"
+#include<stdio.h>
+#include<stdlib.h>
 
-s_JSONin r;
-
-char symbols[] = "{}";
-
-void printToken(){
-	printf("\n%s -> %d\n", r.token, r.type);
-	// printf("%c\n", r.token[0]);
+void skipWhitespace(char**pr){
+    while(*(*pr) == ' ' || *(*pr) == '\n' || *(*pr) == '\t')
+        (*pr)++;
 }
 
-void JSONinParse(char JSON[]){
-	r.raw = JSON;
-	r.i = 0;
-	
-	JSONinCheckObject();
+char* getSubString(char* start, char* end){
+    char* value;
+    int length = end - start;
+    value = (char*) malloc(length+1);
+    for(int i=0; i<=length; i++){
+        if(*(start+i) == '\\'){
+            i++;
+            switch(*(start+i)){
+                case 'n':
+                    value[i] = 'd';
+                    break;
+            }
+        }else{
+            value[i] = *(start+i);
+        }
+    }
+    value[length+1] = '\0';
+    return value;
 }
 
-void JSONinCheckObject(){
-
-	JSONinGetToken();
-	if (!IS_LEFT_BRACE){
-		printf("expected '{'");
-	}
-
-	JSONinGetToken();
-	if (!IS_DOUBLE_QUOTES){
-		printf("expected '\"'");
-	}
-
-	JSONinGetToken();
-	printToken();
+char* getMatchPair(char* pr, char* name){
+    skipWhitespace(&pr);
+    char* pn = &name[0];
+    if(*pr == '}')
+        return 0;
+    pr++; // "
+    int seek = 0;
+    while(*(pn+seek) != '\0' && *(pr+seek) != '\"' && (*(pr+seek) == *(pn+seek)) ){
+        seek++;
+    }
+    if(*(pn+seek) == '\0' && *(pr+seek) == '\"'){
+        pr+=seek;
+        pr++; // "
+        skipWhitespace(&pr);
+        pr++; // :
+        skipWhitespace(&pr);
+        return pr;
+    }else{
+        pr+=seek;
+        while( (*pr != '}') && (*pr != ',')){
+            pr++;
+        }
+        if(*pr == '}')
+            return 0;
+        pr++;
+        return getMatchPair(pr, name);
+    }
 }
 
-void JSONinGetToken(){
-	JSONinClearToken();
+char* JSONinGetStringValue(char* root, char* name){
+    char* pr = &root[0];
+    pr++; // {
+    pr = getMatchPair(pr, name);
+    if(pr == 0)
+        return pr;
 
-	for (int i = 0; i < MAX_TOKEN_LENGTH; ++i){
-		if (i==0){
-			switch(r.raw[r.i]){
-				case LEFT_BRACE:
-					r.token[i] = r.raw[r.i];
-					r.type = SYMBOL;
-					r.i++;
-					return;
-
-				case DOUBLE_QUOTES:
-					r.token[i] = r.raw[r.i];
-					r.type = SYMBOL;
-					r.i++;
-					return;
-
-				default:
-					r.token[i] = r.raw[r.i];
-					r.type = STRING;
-					break;
-			}
-		}else{
-			r.token[i] = r.raw[r.i];
-		}
-
-		r.i++;
-	}
+    if(*pr != '\"')
+        printf("error 1");
+    pr++; // "
+    char *pEndValue = pr;
+    while(*pEndValue != '\"'){
+        if(*pEndValue == '\\'){
+            pEndValue++;
+        }
+        pEndValue++;
+    }
+    char* value = getSubString(pr, pEndValue-1);
+    return value;
 }
 
-void JSONinClearToken(){
-	for (int i = 0; i < MAX_TOKEN_LENGTH; ++i){
-		r.token[i]='\0';
-	}
+int JSONinGetIntegerValue(char* root, char* name){
+    return 0;
 }
