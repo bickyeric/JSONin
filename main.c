@@ -14,14 +14,15 @@ char* readFile(char* filename){
 }
 
 int main(){
-    char* JSON = readFile("schema.json");
-    char* string = JSONinGetStringValue(JSON, "custom");
+    char* JSON = readFile("array.json");
+    printf("%s", JSON);
+    // char* string = JSONinGetStringValue(JSON, "custom");
 
-    if(string){
-        printf("%s", string);
-    }else{
-        printf("tidak ditemukan");
-    }
+    // if(string){
+    //     printf("%s", string);
+    // }else{
+    //     printf("tidak ditemukan");
+    // }
 
     return 0;
 }

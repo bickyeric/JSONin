@@ -55,16 +55,17 @@ char* getMatchPair(char* pr, char* name){
     }
 }
 
+// Get value from object
 char* JSONinGetStringValue(char* root, char* name){
     char* pr = &root[0];
-    pr++; // {
+    pr++;   // skip the `{`
     pr = getMatchPair(pr, name);
     if(pr == 0)
         return pr;
 
     if(*pr != '\"')
         printf("error 1");
-    pr++; // "
+    pr++;   // skip the `"`
     char *pEndValue = pr;
     while(*pEndValue != '\"'){
         if(*pEndValue == '\\'){

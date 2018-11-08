@@ -1,0 +1,42 @@
+{
+    "attr1":"sample string1",
+    "attr2":"quotation mark \" quotation mark",
+    "attr3":"reverse solidus \\ reverse solidus",
+    "attr4":"solidus \/ solidus",
+    "attr5":"backspace \b backspace",
+    "attr6":"formfeed \f formfeed",
+    "attr7":"newline \n newline",
+    "attr8":"carriage return \r carriage return",
+    "attr9":"horizontal tab \t horizontal tab",
+    "attr10":"hexadecimal \u7653 hexadecimal",
+
+    "attr11":0,
+    "attr12":0E+145,
+    "attr13":0E286,
+    "attr14":0E-27572,
+    "attr15":0e+2456,
+    "attr16":0e2546,
+    "attr17":0e-255,
+    "attr18":0.454654,
+    "attr19":54864,
+    "attr20":-2765E3,
+    "attr21":{
+        "attr22":9
+    },
+    "attr23":[
+        1,
+        4,
+        [
+            45,
+            [
+                {
+                    "attr24":true
+                },
+                {
+                    "attr24":true
+                }
+            ]
+        ]
+    ],
+    "attr24":null
+}
